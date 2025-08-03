@@ -46,3 +46,7 @@ Each entry includes:
 **Context**: Frontend lacked reusable components and theming for authentication screens.
 **Decision**: Introduced Button and Input primitives, LoginForm and SignupForm components, centralized API helper, and Tailwind theme tokens with next-themes provider.
 **Reasoning**: Establishes consistent, accessible building blocks and prepares the app for dark mode across login and signup pages.
+## [2025-08-03 04:55:04 UTC] Decision: Build core application screens
+**Context**: Only authentication pages existed on the frontend and the dashboard/other screens from FRONTEND_OUTLINE were missing.
+**Decision**: Added API utilities and implemented Dashboard, Upload, Apply, and Persona detail pages with reusable components (UploadButton, PersonaCard, KnowledgeBaseSummary, CVParsePreview, job tailoring tools, and export controls).
+**Reasoning**: Aligns UI with project outline, enabling CV uploads, persona management, gap analysis and role-specific tailoring directly from the frontend.
