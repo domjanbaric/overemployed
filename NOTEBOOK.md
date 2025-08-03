@@ -42,3 +42,7 @@ Each entry includes:
 **Context**: Frontend on a different port needs to call API during development.
 **Decision**: Added `CORSMiddleware` with origins from `ALLOWED_ORIGINS` env variable defaulting to `*`.
 **Reasoning**: Allows local frontend development without errors while remaining configurable for production.
+## [2025-08-03 04:41:47 UTC] Decision: Add auth form components
+**Context**: Frontend lacked reusable components and theming for authentication screens.
+**Decision**: Introduced Button and Input primitives, LoginForm and SignupForm components, centralized API helper, and Tailwind theme tokens with next-themes provider.
+**Reasoning**: Establishes consistent, accessible building blocks and prepares the app for dark mode across login and signup pages.
