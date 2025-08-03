@@ -50,3 +50,22 @@ GAP_ANALYSIS_PROMPTS = {
     "cv_job_match": CV_JOB_MATCH_TEMPLATE,
     "team_analysis": TEAM_ANALYSIS_TEMPLATE,
 }
+
+CV_PARSE_TEMPLATE = Template(
+    """
+You are an assistant that extracts structured information from a CV.
+
+Return a JSON object with the following keys:
+- "name": string
+- "email": string
+- "phone": string
+- "summary": string
+- "experience": list of {"company", "role", "start_date", "end_date", "description"}
+- "education": list of {"institution", "degree", "start_date", "end_date"}
+- "skills": list of strings
+- "certifications": list of strings
+
+CV Text:
+${cv}
+"""
+)
