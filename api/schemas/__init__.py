@@ -5,6 +5,13 @@ from .persona import PersonaCreate, PersonaOut
 from .gap import GapIssue, GapReportOut, TeamGapRequest
 from .knowledgebase import KBEntryOut, ClarifyRequest, KnowledgeBaseOut
 from .export import ExportRequest, ExportResponse, ExportFormat
+from .template import (
+    TemplateCreate,
+    TemplateOut,
+    TemplateUpdate,
+    TailorRequest,
+    TailorResponse,
+)
 
 __all__ = [
     "SignupRequest",
@@ -25,4 +32,9 @@ __all__ = [
     "ExportRequest",
     "ExportResponse",
     "ExportFormat",
+    "TemplateCreate",
+    "TemplateOut",
+    "TemplateUpdate",
+    "TailorRequest",
+    "TailorResponse",
 ]

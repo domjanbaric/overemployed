@@ -32,8 +32,8 @@ This document outlines the planned features for PersonaForge, grouped by release
 - [ ] Track applied posts per persona
 
 ### 6. Template Editor
-- [ ] Select and customize CV & Cover Letter templates
-- [ ] User-editable sections
+- [x] Select and customize CV & Cover Letter templates
+- [x] User-editable sections
 - [x] Export as PDF or Markdown
 
 ---
@@ -63,7 +63,7 @@ This document outlines the planned features for PersonaForge, grouped by release
 - [x] Show what's missing (e.g., required tech, responsibilities)
 
 ### 11. Auto Tailoring
-- [ ] Suggest edits to CV/persona per role
+- [x] Suggest edits to CV/persona per role
 - [ ] Inline suggestions + one-click changes
 
 ### 12. Outcome Tracking

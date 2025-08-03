@@ -199,14 +199,79 @@ export interface ExportResponse {
   url: string;
 }
 
-export async function exportPersona(id: string, template: string): Promise<ExportResponse> {
+export async function exportPersona(id: string, format: string, templateId: string): Promise<ExportResponse> {
   const res = await fetch(`${API_BASE_URL}/export/${id}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeader() },
-    body: JSON.stringify({ template }),
+    body: JSON.stringify({ format, template_id: templateId }),
   });
   if (!res.ok) {
     throw new Error('Export failed');
+  }
+  return res.json();
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  type: string;
+  engine: string;
+  config: any;
+}
+
+export async function getTemplates(): Promise<Template[]> {
+  const res = await fetch(`${API_BASE_URL}/templates`, {
+    headers: { ...authHeader() },
+  });
+  if (!res.ok) {
+    throw new Error('Failed to load templates');
+  }
+  return res.json();
+}
+
+export interface TemplatePayload {
+  name: string;
+  type: string;
+  engine: string;
+  config: any;
+}
+
+export async function createTemplate(data: TemplatePayload): Promise<Template> {
+  const res = await fetch(`${API_BASE_URL}/templates`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to create template');
+  }
+  return res.json();
+}
+
+export async function updateTemplate(id: string, data: Partial<TemplatePayload>): Promise<Template> {
+  const res = await fetch(`${API_BASE_URL}/templates/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to update template');
+  }
+  return res.json();
+}
+
+export async function tailorTemplate(
+  templateId: string,
+  personaId: string,
+  jobDescription: string,
+): Promise<{ content: string }> {
+  const res = await fetch(`${API_BASE_URL}/templates/${templateId}/tailor`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify({ persona_id: personaId, job_description: jobDescription }),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to tailor template');
   }
   return res.json();
 }

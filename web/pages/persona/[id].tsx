@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { EditorPanel } from '../../components/EditorPanel';
 import { GapAnalysisPanel } from '../../components/GapAnalysisPanel';
 import { TemplateSelector } from '../../components/TemplateSelector';
+import { FormatSelector } from '../../components/FormatSelector';
 import { ExportButton } from '../../components/ExportButton';
 import { getPersona, getGapAnalysis, Persona, GapReport } from '../../utils/api';
 
@@ -11,7 +12,8 @@ export default function PersonaDetail() {
   const { id } = router.query;
   const [persona, setPersona] = useState<Persona | null>(null);
   const [report, setReport] = useState<GapReport>({ issues: [], questions: [] });
-  const [template, setTemplate] = useState('markdown');
+  const [template, setTemplate] = useState('');
+  const [format, setFormat] = useState('md');
 
   useEffect(() => {
     if (typeof id === 'string') {
@@ -33,7 +35,10 @@ export default function PersonaDetail() {
         <div className="w-48">
           <TemplateSelector value={template} onChange={setTemplate} />
         </div>
-        <ExportButton personaId={persona.id} template={template} />
+        <div className="w-32">
+          <FormatSelector value={format} onChange={setFormat} />
+        </div>
+        <ExportButton personaId={persona.id} template={template} format={format} />
       </div>
     </main>
   );
