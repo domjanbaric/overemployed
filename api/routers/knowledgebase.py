@@ -7,7 +7,7 @@ from ..deps import get_db, get_current_user
 router = APIRouter(prefix="/knowledgebase", tags=["knowledgebase"])
 
 
-@router.get("", response_model=list[schemas.KBEntryOut])
+@router.get("", response_model=schemas.KnowledgeBaseOut)
 def list_entries(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
@@ -17,7 +17,25 @@ def list_entries(
         .filter(models.KnowledgeBaseEntry.user_id == current_user.id)
         .all()
     )
-    return entries
+    grouped = {
+        "skills": [],
+        "tools": [],
+        "domains": [],
+        "soft_skills": [],
+        "preferences": [],
+    }
+    for e in entries:
+        if e.type == models.KBType.skill:
+            grouped["skills"].append(e.value)
+        elif e.type == models.KBType.tool:
+            grouped["tools"].append(e.value)
+        elif e.type == models.KBType.domain:
+            grouped["domains"].append(e.value)
+        elif e.type == models.KBType.soft_skill:
+            grouped["soft_skills"].append(e.value)
+        elif e.type == models.KBType.preference:
+            grouped["preferences"].append(e.value)
+    return grouped
 
 
 @router.post("/clarify", response_model=list[schemas.KBEntryOut])

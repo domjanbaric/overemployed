@@ -5,7 +5,7 @@ import {
   getPersonas,
   getKnowledgeBase,
   Persona,
-  KnowledgeBaseEntry,
+  KnowledgeBase,
 } from '../utils/api';
 import { UploadButton } from '../components/UploadButton';
 import { PersonaCard } from '../components/PersonaCard';
@@ -15,12 +15,28 @@ export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState<string>('');
   const [personas, setPersonas] = useState<Persona[]>([]);
-  const [kb, setKb] = useState<KnowledgeBaseEntry[]>([]);
+  const [kb, setKb] = useState<KnowledgeBase>({
+    skills: [],
+    tools: [],
+    domains: [],
+    soft_skills: [],
+    preferences: [],
+  });
 
   useEffect(() => {
     getMe().then(u => setUser(u.name));
     getPersonas().then(setPersonas);
-    getKnowledgeBase().then(setKb).catch(() => setKb([]));
+    getKnowledgeBase()
+      .then(setKb)
+      .catch(() =>
+        setKb({
+          skills: [],
+          tools: [],
+          domains: [],
+          soft_skills: [],
+          preferences: [],
+        })
+      );
   }, []);
 
   function handleUploaded(id: string) {
@@ -34,7 +50,7 @@ export default function Dashboard() {
         <UploadButton onUploaded={handleUploaded} />
       </div>
       <div className="grid gap-4 md:grid-cols-2">
-        <KnowledgeBaseSummary entries={kb} />
+        <KnowledgeBaseSummary kb={kb} />
         <div className="grid gap-4">
           {personas.map(p => (
             <PersonaCard
