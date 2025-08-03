@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from fastapi import APIRouter, Depends, File, UploadFile, HTTPException
 from sqlalchemy.orm import Session
+from uuid import UUID
 
 from .. import schemas, models
 from ..deps import get_db, get_current_user
@@ -35,9 +36,17 @@ def upload_cv(
     return cv
 
 
+@router.get("/list", response_model=list[schemas.CVPreview])
+def list_cvs(
+    db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)
+):
+    cvs = db.query(models.CV).filter(models.CV.user_id == current_user.id).all()
+    return cvs
+
+
 @router.get("/{cv_id}", response_model=schemas.CVDetail)
 def get_cv(
-    cv_id: str,
+    cv_id: UUID,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
@@ -51,17 +60,9 @@ def get_cv(
     return cv
 
 
-@router.get("/list", response_model=list[schemas.CVPreview])
-def list_cvs(
-    db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)
-):
-    cvs = db.query(models.CV).filter(models.CV.user_id == current_user.id).all()
-    return cvs
-
-
 @router.post("/{cv_id}/parse", response_model=schemas.CVDetail)
 def parse_cv(
-    cv_id: str,
+    cv_id: UUID,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):

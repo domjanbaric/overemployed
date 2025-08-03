@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import json
+from uuid import UUID
 
 from .. import schemas, models
 from ..deps import get_db, get_current_user
@@ -11,7 +12,7 @@ router = APIRouter(prefix="/gap_analysis", tags=["gap_analysis"])
 
 @router.get("/{persona_id}", response_model=schemas.GapReportOut)
 def general_gap_analysis(
-    persona_id: str,
+    persona_id: UUID,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
@@ -43,7 +44,8 @@ def role_specific_gap_analysis(
     persona = (
         db.query(models.Persona)
         .filter(
-            models.Persona.id == persona_id, models.Persona.user_id == current_user.id
+            models.Persona.id == UUID(persona_id),
+            models.Persona.user_id == current_user.id,
         )
         .first()
     )
@@ -71,10 +73,11 @@ def team_gap_analysis(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    persona_ids = [UUID(pid) for pid in data.persona_ids]
     personas = (
         db.query(models.Persona)
         .filter(
-            models.Persona.id.in_(data.persona_ids),
+            models.Persona.id.in_(persona_ids),
             models.Persona.user_id == current_user.id,
         )
         .all()

@@ -43,3 +43,25 @@ def test_signup_and_login(client):
     )
     assert login_resp.status_code == 200
     assert login_resp.json()["token"]
+
+
+def test_login_with_wrong_password(client):
+    client.post(
+        "/auth/signup",
+        json={"email": "user@example.com", "password": "correct", "name": "User"},
+    )
+
+    resp = client.post(
+        "/auth/login",
+        json={"email": "user@example.com", "password": "wrong"},
+    )
+    assert resp.status_code == 401
+
+
+def test_signup_duplicate_email(client):
+    data = {"email": "dup@example.com", "password": "secret", "name": "Dup"}
+    first = client.post("/auth/signup", json=data)
+    assert first.status_code == 200
+
+    second = client.post("/auth/signup", json=data)
+    assert second.status_code == 400

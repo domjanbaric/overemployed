@@ -80,7 +80,10 @@ def tailor_template(
         raise HTTPException(status_code=404, detail="Template not found")
     persona = (
         db.query(models.Persona)
-        .filter(models.Persona.id == request.persona_id, models.Persona.user_id == current_user.id)
+        .filter(
+            models.Persona.id == UUID(request.persona_id),
+            models.Persona.user_id == current_user.id,
+        )
         .first()
     )
     if not persona:
