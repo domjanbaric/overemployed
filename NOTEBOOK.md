@@ -59,3 +59,8 @@ Each entry includes:
 **Context**: Frontend only displayed static issues and lacked support for role or team gap analyses.
 **Decision**: Updated API utilities and UI panels to consume a unified `GapReport` shape, exposing clarifying questions for CV, role-match, and team analyses.
 **Reasoning**: Ensures consistent chatbot-style interactions across analysis modes and prepares UI for follow-up conversations.
+
+## [2025-08-03 06:31:34 UTC] Decision: Document implemented features
+**Context**: Needed to reflect current project progress in `FEATURES.md`.
+**Decision**: Reviewed repository to determine which planned features are implemented and marked them with checkboxes in `FEATURES.md`.
+**Reasoning**: Keeps feature roadmap up to date, highlighting completed work and remaining scope for contributors.
