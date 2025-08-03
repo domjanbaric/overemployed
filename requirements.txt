@@ -4,3 +4,6 @@ sqlalchemy
 python-multipart
 passlib[bcrypt]
 python-jose[cryptography]
+jinja2
+markdown
+fpdf2
