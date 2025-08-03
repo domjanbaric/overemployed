@@ -18,3 +18,7 @@ Each entry includes:
 **Context**: The stack previously only had backend and frontend containers. Database used local SQLite and file uploads stored on local disk. We want containerized Postgres and object storage plus shared env configuration.
 **Decision**: Added `db` and `minio` services to `docker-compose.yml` with persistent volumes and exposed ports. Created `.env` file with dev credentials and referenced it from all services. Updated backend code to read `DATABASE_URL` and `SECRET_KEY` from environment variables so Compose configuration applies automatically.
 **Reasoning**: Provides consistent dev environment with stateful services and avoids hardcoding secrets or SQLite path. Environment variables make configuration flexible for production.
+## [2025-07-22 10:05:26 UTC] Decision: Store KB clarifications as entries
+**Context**: Implemented `/knowledgebase` endpoints. Needed to decide how to persist clarification answers.**
+**Decision**: Represent clarifications as `KnowledgeBaseEntry` records with `type` `preference` and `source` `user_answer`. This reuses the existing table without introducing a new model.
+**Reasoning**: Using the same schema keeps the knowledge base unified and avoids managing a separate answers table. Each answer simply contributes a new entry, making retrieval via `GET /knowledgebase` straightforward.
