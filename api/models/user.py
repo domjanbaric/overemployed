@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, DateTime, Enum as SQLAlchemyEnum, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
@@ -22,7 +22,7 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     name = Column(String, nullable=False)
     plan = Column(SQLAlchemyEnum(PlanEnum), default=PlanEnum.free, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     team_id = Column(UUID(as_uuid=True), ForeignKey("teams.id"), nullable=True)
 
     team = relationship("Team", back_populates="members", foreign_keys=[team_id])

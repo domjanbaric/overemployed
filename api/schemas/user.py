@@ -1,6 +1,7 @@
 from typing import Optional
-from pydantic import BaseModel, EmailStr
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class UserOut(BaseModel):
@@ -10,8 +11,7 @@ class UserOut(BaseModel):
     plan: str
     team_id: Optional[UUID] = None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserUpdate(BaseModel):

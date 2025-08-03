@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, DateTime, Enum as SQLAlchemyEnum, ForeignKey, String, Text, JSON
 from sqlalchemy.dialects.postgresql import UUID
@@ -23,7 +23,7 @@ class CV(Base):
     raw_text = Column(Text)
     parsed_json = Column(JSON)
     status = Column(SQLAlchemyEnum(CVStatus), default=CVStatus.pending)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     user = relationship("User", back_populates="cvs")
     personas = relationship("Persona", back_populates="base_cv")

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, DateTime, Enum as SQLAlchemyEnum, ForeignKey, Text, JSON
 from sqlalchemy.dialects.postgresql import UUID
@@ -22,6 +22,6 @@ class GapReport(Base):
     type = Column(SQLAlchemyEnum(GapType), nullable=False)
     input_text = Column(Text)
     issues = Column(JSON)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     persona = relationship("Persona", back_populates="gap_reports")

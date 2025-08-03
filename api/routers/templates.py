@@ -22,7 +22,7 @@ def create_template(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    tmpl = models.Template(**template.dict())
+    tmpl = models.Template(**template.model_dump())
     db.add(tmpl)
     db.commit()
     db.refresh(tmpl)
@@ -47,7 +47,7 @@ def update_template(
     tmpl = db.query(models.Template).filter(models.Template.id == template_id).first()
     if not tmpl:
         raise HTTPException(status_code=404, detail="Template not found")
-    for field, value in template.dict(exclude_unset=True).items():
+    for field, value in template.model_dump(exclude_unset=True).items():
         setattr(tmpl, field, value)
     db.commit()
     db.refresh(tmpl)
