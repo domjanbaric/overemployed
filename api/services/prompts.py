@@ -15,10 +15,13 @@ Respond in JSON with two keys:
 
 CV_JOB_MATCH_TEMPLATE = Template(
     """
-You are an AI recruiter comparing a candidate's CV against a job posting.
+You are an AI recruiter comparing a candidate's CV and knowledge base against a job posting.
 
 CV:
 ${cv}
+
+Knowledge Base (JSON):
+${kb}
 
 Job Description:
 ${job}

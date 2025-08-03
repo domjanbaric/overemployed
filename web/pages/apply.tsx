@@ -70,7 +70,7 @@ export default function ApplyPage() {
         </div>
       </form>
       <div className="mt-6 space-y-4">
-        {report && <GapAnalysisPanel report={report} />}
+        {report && <GapAnalysisPanel report={report} personaId={selected} />}
         {tailored && <Textarea label="Tailored CV" value={tailored} readOnly rows={10} />}
       </div>
     </main>

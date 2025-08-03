@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+import json
 
 from .. import schemas, models
 from ..deps import get_db, get_current_user
@@ -48,8 +49,20 @@ def role_specific_gap_analysis(
     )
     if not persona:
         raise HTTPException(status_code=404, detail="Persona not found")
+
+    kb_entries = (
+        db.query(models.KnowledgeBaseEntry)
+        .filter(models.KnowledgeBaseEntry.user_id == current_user.id)
+        .all()
+    )
+    kb: dict[str, list[str]] = {}
+    for entry in kb_entries:
+        kb.setdefault(entry.type.value, []).append(entry.value)
+
     agent = GapAnalysisAgent("cv_job_match")
-    return agent.start(cv=persona.summary or "", job=job_description)
+    return agent.start(
+        cv=persona.summary or "", job=job_description, kb=json.dumps(kb)
+    )
 
 
 @router.post("/team", response_model=schemas.GapReportOut)
