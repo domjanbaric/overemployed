@@ -22,3 +22,23 @@ Each entry includes:
 **Context**: Core authentication and persona routes were implemented without automated verification.
 **Decision**: Added pytest-based test suite with fixtures spinning up a temporary SQLite database. Tests cover user signup/login and persona creation/update. Created `requirements-dev.txt` with pytest for development dependencies.
 **Reasoning**: Automated tests ensure API functionality remains stable as the project evolves and provide a quick regression check for future contributions.
+## [2025-07-22 10:04:44 UTC] Decision: Add Postgres driver dependency
+**Context**: Postgres is used via SQLAlchemy but the driver was missing from `requirements.txt` and thus from the backend container.
+**Decision**: Appended `psycopg2-binary` to `requirements.txt` and documented rebuilding the backend Docker image in `README.md`.
+**Reasoning**: `psycopg2-binary` ensures database connectivity when running in Docker or locally. Documentation reminds developers to rebuild so the dependency is installed.
+## [2025-07-22 10:05:26 UTC] Decision: Store KB clarifications as entries
+**Context**: Implemented `/knowledgebase` endpoints. Needed to decide how to persist clarification answers.**
+**Decision**: Represent clarifications as `KnowledgeBaseEntry` records with `type` `preference` and `source` `user_answer`. This reuses the existing table without introducing a new model.
+**Reasoning**: Using the same schema keeps the knowledge base unified and avoids managing a separate answers table. Each answer simply contributes a new entry, making retrieval via `GET /knowledgebase` straightforward.
+## [2025-07-22 10:05:26 UTC] Decision: Fix persona overrides update
+**Context**: Updating a persona previously allowed storing an `overrides` attribute on the SQLAlchemy model rather than persisting it to the `data` JSON field.
+**Decision**: In `update_persona` we now call `data.dict(exclude_unset=True)` and map the `overrides` key to `persona.data` before applying other fields.
+**Reasoning**: Ensures persona override data is saved correctly and prevents stray attributes on the model.
+## [2025-07-22 10:06:00 UTC] Decision: Add export endpoint
+**Context**: API_SPEC defined a route to export personas but it was missing from the code.
+**Decision**: Implemented `POST /export/{persona_id}` router using Jinja2 to render persona data to Markdown, then optionally convert to PDF with `fpdf2`. Results are saved under `uploads/` and returned as a URL. Added `ExportRequest` and `ExportResponse` schemas and included the router in the main API. Dependencies `jinja2`, `markdown`, and `fpdf2` were added.
+**Reasoning**: Enables basic persona export functionality matching the spec while keeping implementation lightweight and extensible for future template customization.
+## [2025-07-22 10:04:49 UTC] Decision: Enable CORS middleware
+**Context**: Frontend on a different port needs to call API during development.
+**Decision**: Added `CORSMiddleware` with origins from `ALLOWED_ORIGINS` env variable defaulting to `*`.
+**Reasoning**: Allows local frontend development without errors while remaining configurable for production.
