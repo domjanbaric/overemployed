@@ -136,3 +136,7 @@ Each entry includes:
 **Context**: The web app had no automated tests covering the login and signup flows.
 **Decision**: Added Jest with React Testing Library, configured Next.js test environment, and wrote tests for `LoginForm` and `SignupForm` to verify API integration, token persistence, and error handling.
 **Reasoning**: Protects critical authentication interactions from regressions and establishes a foundation for broader component testing.
+## [2025-08-03 14:39:13 UTC] Decision: Migrate to Pydantic v2
+**Context**: Deprecation warnings arose from Pydantic v1 patterns (`orm_mode`, `.dict()`) and naive datetime usage in models and token creation.
+**Decision**: Replaced `orm_mode` with `ConfigDict(from_attributes=True)`, switched `.dict()` calls to `model_dump()`, and adopted timezone-aware `datetime.now(timezone.utc)` defaults.
+**Reasoning**: Aligns schemas and routers with Pydantic v2 and Python 3.12, removing warnings and ensuring future compatibility.

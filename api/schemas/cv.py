@@ -1,7 +1,8 @@
 from datetime import datetime
-from typing import List, Optional
-from pydantic import BaseModel
+from typing import Optional
 from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
 
 
 class CVPreview(BaseModel):
@@ -9,8 +10,7 @@ class CVPreview(BaseModel):
     filename: str
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CVDetail(CVPreview):

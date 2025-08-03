@@ -71,7 +71,7 @@ def update_persona(
     )
     if not persona:
         raise HTTPException(status_code=404, detail="Persona not found")
-    update_data = data.dict(exclude_unset=True)
+    update_data = data.model_dump(exclude_unset=True)
     if "overrides" in update_data:
         persona.data = update_data.pop("overrides")
     for field, value in update_data.items():

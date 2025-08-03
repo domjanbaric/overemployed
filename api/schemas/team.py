@@ -1,7 +1,8 @@
 from datetime import datetime
-from uuid import UUID
 from typing import List
-from pydantic import BaseModel, EmailStr
+from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 from .user import UserOut
 from .persona import PersonaOut
@@ -19,8 +20,7 @@ class TeamInviteOut(BaseModel):
     accepted: bool
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 TeamMembersOut = List[UserOut]
