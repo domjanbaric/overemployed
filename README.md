@@ -43,3 +43,12 @@ Users upload CVs (PDF, DOCX), from which our system extracts structured data, pe
 ├── STYLE_GUIDE.md      # Frontend design and coding standards
 ├── NOTEBOOK.md        # Codex logs its thoughts & decisions here
 ```
+
+## 🐳 Docker Setup
+
+The backend Docker image installs packages from `requirements.txt`. After adding `psycopg2-binary` to enable PostgreSQL connections, rebuild the container so the new dependency is included:
+
+```bash
+docker compose build backend
+```
+
