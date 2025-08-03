@@ -56,6 +56,15 @@ export interface Persona {
   tags?: string[];
 }
 
+function mapPersona(p: any): Persona {
+  return {
+    id: p.id,
+    name: p.name ?? p.title,
+    summary: p.summary,
+    tags: p.tags,
+  };
+}
+
 export async function getPersonas(): Promise<Persona[]> {
   const res = await fetch(`${API_BASE_URL}/personas`, {
     headers: { ...authHeader() },
@@ -63,7 +72,8 @@ export async function getPersonas(): Promise<Persona[]> {
   if (!res.ok) {
     throw new Error('Failed to load personas');
   }
-  return res.json();
+  const data = await res.json();
+  return Array.isArray(data) ? data.map(mapPersona) : [];
 }
 
 export interface KnowledgeBase {
@@ -80,6 +90,27 @@ export async function getKnowledgeBase(): Promise<KnowledgeBase> {
   });
   if (!res.ok) {
     throw new Error('Failed to load knowledge base');
+  }
+  return res.json();
+}
+
+export interface KBEntry {
+  id: string;
+  type: string;
+  value: string;
+  source: string;
+}
+
+export async function clarifyKnowledgeBase(
+  answers: Record<string, string>,
+): Promise<KBEntry[]> {
+  const res = await fetch(`${API_BASE_URL}/knowledgebase/clarify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify({ answers }),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to submit answers');
   }
   return res.json();
 }
@@ -125,19 +156,62 @@ export async function getPersona(id: string): Promise<Persona> {
   if (!res.ok) {
     throw new Error('Failed to load persona');
   }
-  return res.json();
+  const data = await res.json();
+  return mapPersona(data);
 }
 
 export async function updatePersona(id: string, data: Partial<Persona>): Promise<Persona> {
+  const payload: any = { ...data };
+  if (payload.name) {
+    payload.title = payload.name;
+    delete payload.name;
+  }
   const res = await fetch(`${API_BASE_URL}/personas/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...authHeader() },
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   });
   if (!res.ok) {
     throw new Error('Failed to update persona');
   }
-  return res.json();
+  const updated = await res.json();
+  return mapPersona(updated);
+}
+
+export interface PersonaPayload {
+  name: string;
+  summary?: string;
+  tags?: string[];
+  base_cv_id?: string;
+}
+
+export async function createPersona(data: PersonaPayload): Promise<Persona> {
+  const payload: any = {
+    title: data.name,
+    summary: data.summary,
+    tags: data.tags,
+    base_cv_id: data.base_cv_id,
+  };
+  const res = await fetch(`${API_BASE_URL}/personas`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to create persona');
+  }
+  const created = await res.json();
+  return mapPersona(created);
+}
+
+export async function deletePersona(id: string): Promise<void> {
+  const res = await fetch(`${API_BASE_URL}/personas/${id}`, {
+    method: 'DELETE',
+    headers: { ...authHeader() },
+  });
+  if (!res.ok) {
+    throw new Error('Failed to delete persona');
+  }
 }
 
 export interface GapIssue {
@@ -212,7 +286,8 @@ export async function getTeamPersonas(): Promise<Persona[]> {
   if (!res.ok) {
     throw new Error('Failed to load team personas');
   }
-  return res.json();
+  const data = await res.json();
+  return Array.isArray(data) ? data.map(mapPersona) : [];
 }
 
 export async function inviteTeamMember(email: string): Promise<void> {
