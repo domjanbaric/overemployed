@@ -33,10 +33,13 @@ Users upload CVs (PDF, DOCX), from which our system extracts structured data, pe
 │   ├── schemas/        # Pydantic DTOs
 ├── web/                # Next.js frontend
 ├── .env.example
-├── README.md
-├── FEATURES.md
-├── API_SPEC.md
-├── DATABASE.md
-├── AGENT.md
+├── README.md           # Main .md which describes the project
+├── FEATURES.md         # Features grouped by milestone
+├── API_SPEC.md         # REST API description
+├── DATABASE.md         # Database schema and structure
+├── AGENT.md            # Codex agent role and capabilities
+├── ARCHITECTURE.md     # High-level architecture overview
+├── FRONTEND_OUTLINE.md  # Frontend component structure
+├── STYLE_GUIDE.md      # Frontend design and coding standards
 ├── NOTEBOOK.md        # Codex logs its thoughts & decisions here
 ```
