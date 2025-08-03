@@ -18,3 +18,7 @@ Each entry includes:
 **Context**: The stack previously only had backend and frontend containers. Database used local SQLite and file uploads stored on local disk. We want containerized Postgres and object storage plus shared env configuration.
 **Decision**: Added `db` and `minio` services to `docker-compose.yml` with persistent volumes and exposed ports. Created `.env` file with dev credentials and referenced it from all services. Updated backend code to read `DATABASE_URL` and `SECRET_KEY` from environment variables so Compose configuration applies automatically.
 **Reasoning**: Provides consistent dev environment with stateful services and avoids hardcoding secrets or SQLite path. Environment variables make configuration flexible for production.
+## [2025-07-22 10:04:44 UTC] Decision: Add Postgres driver dependency
+**Context**: Postgres is used via SQLAlchemy but the driver was missing from `requirements.txt` and thus from the backend container.
+**Decision**: Appended `psycopg2-binary` to `requirements.txt` and documented rebuilding the backend Docker image in `README.md`.
+**Reasoning**: `psycopg2-binary` ensures database connectivity when running in Docker or locally. Documentation reminds developers to rebuild so the dependency is installed.
