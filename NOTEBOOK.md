@@ -113,3 +113,18 @@ Each entry includes:
 **Context**: Role-specific gap analysis ignored stored skills and the UI lacked a way to apply AI suggestions.
 **Decision**: Included user knowledge base entries in the job match prompt and added an "Apply" button to gap suggestions that patches persona fields.
 **Reasoning**: Leveraging the full knowledge base yields richer gap detection while inline actions enable one-click tailoring of personas.
+
+## [2025-08-03 11:27:30 UTC] Decision: Expose persona creation and deletion in dashboard
+**Context**: Users could edit personas but had no UI to create new ones or remove existing entries. API payloads also used `title` while the frontend expected `name`.
+**Decision**: Added `createPersona` and `deletePersona` helpers that map between `title` and `name`, a `CreatePersonaForm` component, and delete controls on persona cards with dashboard wiring.
+**Reasoning**: Restores full persona lifecycle management from the UI and reconciles backend naming differences for consistent edits.
+
+## [2025-08-03 11:27:30 UTC] Decision: Support knowledge base clarifications in gap analysis panel
+**Context**: Gap analysis returned clarifying questions but the frontend only displayed them without collecting answers.
+**Decision**: Extended `GapAnalysisPanel` with input fields for each question, submission to `/knowledgebase/clarify`, and optional callbacks to refresh data.
+**Reasoning**: Enables iterative Q&A to enrich the knowledge base directly from analysis results.
+
+## [2025-08-03 11:27:30 UTC] Decision: Implement team gap analysis UI
+**Context**: Backend exposed a team gap analysis endpoint, yet the team page lacked any interface to invoke it.
+**Decision**: Added form on `/team` to enter a team description, select multiple personas, and render results via `GapAnalysisPanel` using the `teamGapAnalysis` API.
+**Reasoning**: Completes team-level evaluation workflows and allows collaborative assessment of multiple personas against a shared goal.

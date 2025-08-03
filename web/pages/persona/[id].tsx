@@ -30,7 +30,7 @@ export default function PersonaDetail() {
     <main className="space-y-6 p-8">
       <h1 className="text-2xl font-bold">{persona.name}</h1>
       <EditorPanel persona={persona} onUpdated={setPersona} />
-      <GapAnalysisPanel report={report} />
+      <GapAnalysisPanel report={report} personaId={persona.id} />
       <div className="flex items-end gap-4">
         <div className="w-48">
           <TemplateSelector value={template} onChange={setTemplate} />

@@ -3,14 +3,27 @@ import { Persona } from '../utils/api';
 interface PersonaCardProps {
   persona: Persona;
   onClick?: () => void;
+  onDelete?: () => void;
 }
 
-export function PersonaCard({ persona, onClick }: PersonaCardProps) {
+export function PersonaCard({ persona, onClick, onDelete }: PersonaCardProps) {
   return (
     <div
       onClick={onClick}
-      className="cursor-pointer rounded-xl border border-gray-300 p-4 shadow-sm hover:bg-surface-hover dark:border-gray-700 dark:hover:bg-surface-hover-dark"
+      className="relative cursor-pointer rounded-xl border border-gray-300 p-4 shadow-sm hover:bg-surface-hover dark:border-gray-700 dark:hover:bg-surface-hover-dark"
     >
+      {onDelete && (
+        <button
+          type="button"
+          className="absolute right-2 top-2 text-sm text-red-600"
+          onClick={e => {
+            e.stopPropagation();
+            onDelete();
+          }}
+        >
+          Delete
+        </button>
+      )}
       <h3 className="text-lg font-semibold text-onSurface dark:text-onSurface-dark">{persona.name}</h3>
       {persona.summary && (
         <p className="text-sm text-onSurface-variant dark:text-onSurface-variant-dark">{persona.summary}</p>
