@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from uuid import UUID
 from sqlalchemy.orm import Session
 
 from .. import schemas, models
@@ -38,7 +39,7 @@ def create_persona(
 
 @router.get("/{persona_id}", response_model=schemas.PersonaOut)
 def get_persona(
-    persona_id: str,
+    persona_id: UUID,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
@@ -56,7 +57,7 @@ def get_persona(
 
 @router.patch("/{persona_id}", response_model=schemas.PersonaOut)
 def update_persona(
-    persona_id: str,
+    persona_id: UUID,
     data: schemas.PersonaCreate,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
@@ -83,7 +84,7 @@ def update_persona(
 
 @router.delete("/{persona_id}")
 def delete_persona(
-    persona_id: str,
+    persona_id: UUID,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):

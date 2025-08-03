@@ -1,5 +1,6 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, Text, JSON
+from enum import Enum as PyEnum
+from sqlalchemy import Column, DateTime, Enum as SQLAlchemyEnum, ForeignKey, Text, JSON
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
@@ -7,7 +8,7 @@ import uuid
 from ..database import Base
 
 
-class GapType(str, Enum):
+class GapType(str, PyEnum):
     general = "general"
     role_specific = "role_specific"
 
@@ -17,7 +18,7 @@ class GapReport(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     persona_id = Column(UUID(as_uuid=True), ForeignKey("personas.id"), nullable=False)
-    type = Column(Enum(GapType), nullable=False)
+    type = Column(SQLAlchemyEnum(GapType), nullable=False)
     input_text = Column(Text)
     issues = Column(JSON)
     created_at = Column(DateTime, default=datetime.utcnow)

@@ -1,11 +1,12 @@
-from sqlalchemy import Column, Enum, ForeignKey, String
+from enum import Enum as PyEnum
+from sqlalchemy import Column, Enum as SQLAlchemyEnum, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
 from ..database import Base
 
 
-class KBType(str, Enum):
+class KBType(str, PyEnum):
     skill = "skill"
     tool = "tool"
     domain = "domain"
@@ -13,7 +14,7 @@ class KBType(str, Enum):
     preference = "preference"
 
 
-class KBSource(str, Enum):
+class KBSource(str, PyEnum):
     cv = "cv"
     user_answer = "user_answer"
     ai_extraction = "ai_extraction"
@@ -24,6 +25,6 @@ class KnowledgeBaseEntry(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    type = Column(Enum(KBType), nullable=False)
+    type = Column(SQLAlchemyEnum(KBType), nullable=False)
     value = Column(String, nullable=False)
-    source = Column(Enum(KBSource), nullable=False)
+    source = Column(SQLAlchemyEnum(KBSource), nullable=False)

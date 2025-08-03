@@ -1,5 +1,6 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, String, Text, JSON
+from enum import Enum as PyEnum
+from sqlalchemy import Column, DateTime, Enum as SQLAlchemyEnum, ForeignKey, String, Text, JSON
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
@@ -7,7 +8,7 @@ import uuid
 from ..database import Base
 
 
-class CVStatus(str, Enum):
+class CVStatus(str, PyEnum):
     pending = "pending"
     parsed = "parsed"
     failed = "failed"
@@ -21,7 +22,7 @@ class CV(Base):
     filename = Column(String, nullable=False)
     raw_text = Column(Text)
     parsed_json = Column(JSON)
-    status = Column(Enum(CVStatus), default=CVStatus.pending)
+    status = Column(SQLAlchemyEnum(CVStatus), default=CVStatus.pending)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="cvs")

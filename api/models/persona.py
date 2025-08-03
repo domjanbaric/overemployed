@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, ForeignKey, String, Text, JSON, ARRAY
+from sqlalchemy import Column, DateTime, ForeignKey, String, Text, JSON
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
@@ -14,7 +14,7 @@ class Persona(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     title = Column(String, nullable=False)
     summary = Column(Text)
-    tags = Column(ARRAY(String))
+    tags = Column(JSON)
     data = Column(JSON)
     base_cv_id = Column(UUID(as_uuid=True), ForeignKey("cvs.id"))
     created_at = Column(DateTime, default=datetime.utcnow)
