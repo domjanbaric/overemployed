@@ -108,3 +108,8 @@ Each entry includes:
 **Context**: The taxonomy approach requires further design and isn't ready for production.
 **Decision**: Removed service usage and replaced its implementation with a `NotImplementedError` stub.
 **Reasoning**: Pausing the feature avoids premature complexity while signaling unfinished functionality if imported.
+
+## [2025-08-03 10:49:57 UTC] Decision: Expand role gap analysis with knowledge base and inline fixes
+**Context**: Role-specific gap analysis ignored stored skills and the UI lacked a way to apply AI suggestions.
+**Decision**: Included user knowledge base entries in the job match prompt and added an "Apply" button to gap suggestions that patches persona fields.
+**Reasoning**: Leveraging the full knowledge base yields richer gap detection while inline actions enable one-click tailoring of personas.
