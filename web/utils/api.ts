@@ -195,6 +195,37 @@ export async function teamGapAnalysis(req: TeamGapRequest): Promise<GapReport> {
   return res.json();
 }
 
+export async function getTeamMembers(): Promise<User[]> {
+  const res = await fetch(`${API_BASE_URL}/team/members`, {
+    headers: { ...authHeader() },
+  });
+  if (!res.ok) {
+    throw new Error('Failed to load team members');
+  }
+  return res.json();
+}
+
+export async function getTeamPersonas(): Promise<Persona[]> {
+  const res = await fetch(`${API_BASE_URL}/team/personas`, {
+    headers: { ...authHeader() },
+  });
+  if (!res.ok) {
+    throw new Error('Failed to load team personas');
+  }
+  return res.json();
+}
+
+export async function inviteTeamMember(email: string): Promise<void> {
+  const res = await fetch(`${API_BASE_URL}/team/invite`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify({ email }),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to send invite');
+  }
+}
+
 export interface ExportResponse {
   url: string;
 }

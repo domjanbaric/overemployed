@@ -41,13 +41,13 @@ This document outlines the planned features for PersonaForge, grouped by release
 ## 🌱 V1.1 – Freelancers + Teams
 
 ### 7. Team/Agency Accounts
-- [ ] Invite users to team
-- [ ] Upload multiple CVs (per member)
-- [ ] Assign personas per user
+- [x] Invite users to team
+- [x] Upload multiple CVs (per member)
+- [x] Assign personas per user
 
 ### 8. Team Personas
-- [ ] Collective skill/persona overview
-- [ ] Apply as a team (e.g., “React + Backend + DevOps combo”)
+- [x] Collective skill/persona overview
+- [x] Apply as a team (e.g., “React + Backend + DevOps combo”)
 
 ### 9. Skill Taxonomy + Tags
 - [ ] Auto-tag skills

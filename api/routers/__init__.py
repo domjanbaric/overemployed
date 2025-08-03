@@ -1,6 +1,16 @@
 from fastapi import APIRouter
 
-from . import auth, users, cv, personas, gap_analysis, knowledgebase, export, templates
+from . import (
+    auth,
+    users,
+    cv,
+    personas,
+    gap_analysis,
+    knowledgebase,
+    export,
+    templates,
+    team,
+)
 
 api_router = APIRouter()
 api_router.include_router(auth.router)
@@ -11,3 +21,4 @@ api_router.include_router(gap_analysis.router)
 api_router.include_router(knowledgebase.router)
 api_router.include_router(export.router)
 api_router.include_router(templates.router)
+api_router.include_router(team.router)

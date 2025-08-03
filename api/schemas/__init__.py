@@ -12,6 +12,7 @@ from .template import (
     TailorRequest,
     TailorResponse,
 )
+from .team import TeamInviteCreate, TeamInviteOut, TeamMembersOut, TeamPersonasOut
 
 __all__ = [
     "SignupRequest",
@@ -26,6 +27,10 @@ __all__ = [
     "GapIssue",
     "GapReportOut",
     "TeamGapRequest",
+    "TeamInviteCreate",
+    "TeamInviteOut",
+    "TeamMembersOut",
+    "TeamPersonasOut",
     "KBEntryOut",
     "ClarifyRequest",
     "KnowledgeBaseOut",

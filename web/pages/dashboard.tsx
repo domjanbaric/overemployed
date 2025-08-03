@@ -7,6 +7,7 @@ import {
   Persona,
   KnowledgeBase,
 } from '../utils/api';
+import Link from 'next/link';
 import { UploadButton } from '../components/UploadButton';
 import { PersonaCard } from '../components/PersonaCard';
 import { KnowledgeBaseSummary } from '../components/KnowledgeBaseSummary';
@@ -46,8 +47,11 @@ export default function Dashboard() {
   return (
     <main className="space-y-6 p-8">
       <h1 className="text-2xl font-bold">Welcome, {user}</h1>
-      <div>
+      <div className="flex items-center gap-4">
         <UploadButton onUploaded={handleUploaded} />
+        <Link href="/team" className="text-primary underline">
+          Team
+        </Link>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <KnowledgeBaseSummary kb={kb} />
