@@ -11,6 +11,7 @@ from ..database import Base
 class GapType(str, PyEnum):
     general = "general"
     role_specific = "role_specific"
+    team = "team"
 
 
 class GapReport(Base):

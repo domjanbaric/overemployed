@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel
 
 
@@ -9,4 +9,10 @@ class GapIssue(BaseModel):
 
 
 class GapReportOut(BaseModel):
-    issues: List[GapIssue]
+    issues: List[GapIssue] = []
+    questions: List[str] = []
+
+
+class TeamGapRequest(BaseModel):
+    persona_ids: List[str]
+    team_description: str

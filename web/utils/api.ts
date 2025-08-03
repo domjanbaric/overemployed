@@ -139,20 +139,24 @@ export async function updatePersona(id: string, data: Partial<Persona>): Promise
 }
 
 export interface GapIssue {
-  id: string;
   field: string;
-  message: string;
+  suggestion: string;
+  severity: string;
 }
 
-export async function getGapAnalysis(id: string): Promise<GapIssue[]> {
+export interface GapReport {
+  issues: GapIssue[];
+  questions: string[];
+}
+
+export async function getGapAnalysis(id: string): Promise<GapReport> {
   const res = await fetch(`${API_BASE_URL}/gap_analysis/${id}`, {
     headers: { ...authHeader() },
   });
   if (!res.ok) {
     throw new Error('Failed to load gap analysis');
   }
-  const data = await res.json();
-  return data.issues ?? [];
+  return res.json();
 }
 
 export interface RoleMatchRequest {
@@ -160,11 +164,7 @@ export interface RoleMatchRequest {
   job_description: string;
 }
 
-export interface RoleMatchResponse {
-  suggestions: string[];
-}
-
-export async function roleMatch(req: RoleMatchRequest): Promise<RoleMatchResponse> {
+export async function roleMatch(req: RoleMatchRequest): Promise<GapReport> {
   const res = await fetch(`${API_BASE_URL}/gap_analysis/role_match`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeader() },
@@ -172,6 +172,23 @@ export async function roleMatch(req: RoleMatchRequest): Promise<RoleMatchRespons
   });
   if (!res.ok) {
     throw new Error('Failed to analyze role');
+  }
+  return res.json();
+}
+
+export interface TeamGapRequest {
+  persona_ids: string[];
+  team_description: string;
+}
+
+export async function teamGapAnalysis(req: TeamGapRequest): Promise<GapReport> {
+  const res = await fetch(`${API_BASE_URL}/gap_analysis/team`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify(req),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to analyze team');
   }
   return res.json();
 }
