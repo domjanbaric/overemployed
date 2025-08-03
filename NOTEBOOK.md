@@ -128,3 +128,7 @@ Each entry includes:
 **Context**: Backend exposed a team gap analysis endpoint, yet the team page lacked any interface to invoke it.
 **Decision**: Added form on `/team` to enter a team description, select multiple personas, and render results via `GapAnalysisPanel` using the `teamGapAnalysis` API.
 **Reasoning**: Completes team-level evaluation workflows and allows collaborative assessment of multiple personas against a shared goal.
+## [2025-08-03 12:35:18 UTC] Decision: Enforce UUID usage in routers
+**Context**: Added extensive endpoint tests which surfaced issues where string IDs failed against UUID columns and the `/cv/list` route was shadowed by the dynamic `{cv_id}` path.
+**Decision**: Updated CV, export, gap analysis, and templates routers to use `UUID` parameters and convert request fields accordingly. Reordered CV routes so `/cv/list` resolves correctly.
+**Reasoning**: Aligns request handling with database types, preventing runtime errors and ensuring all endpoints are reachable for testing.

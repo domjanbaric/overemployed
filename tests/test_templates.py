@@ -64,3 +64,45 @@ def test_template_crud(client):
     )
     assert update_resp.status_code == 200
     assert update_resp.json()["name"] == "Updated"
+
+def test_get_delete_and_tailor_template(client, monkeypatch):
+    token = signup_token(client)
+    headers = {"Authorization": f"Bearer {token}"}
+
+    create_resp = client.post(
+        "/templates",
+        json={
+            "name": "Tailor", "type": "cv", "engine": "markdown", "config": {"template": "Hi"}
+        },
+        headers=headers,
+    )
+    assert create_resp.status_code == 200
+    template_id = create_resp.json()["id"]
+
+    get_resp = client.get(f"/templates/{template_id}", headers=headers)
+    assert get_resp.status_code == 200
+
+    persona_resp = client.post(
+        "/personas", json={"title": "Dev", "summary": ""}, headers=headers
+    )
+    persona_id = persona_resp.json()["id"]
+
+    class DummyCopilot:
+        def tailor(self, persona, job_description, tmpl):
+            return f"tailored {persona.title}"
+
+    monkeypatch.setattr("api.routers.templates.TailorCopilot", DummyCopilot)
+
+    tailor_resp = client.post(
+        f"/templates/{template_id}/tailor",
+        json={"persona_id": persona_id, "job_description": "Job"},
+        headers=headers,
+    )
+    assert tailor_resp.status_code == 200
+    assert "tailored" in tailor_resp.json()["content"]
+
+    del_resp = client.delete(f"/templates/{template_id}", headers=headers)
+    assert del_resp.status_code == 200
+
+    list_resp = client.get("/templates", headers=headers)
+    assert list_resp.json() == []

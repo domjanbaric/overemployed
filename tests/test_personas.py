@@ -60,3 +60,38 @@ def test_create_and_update_persona(client):
     )
     assert update_resp.status_code == 200
     assert update_resp.json()["summary"] == "Updated"
+
+def test_list_get_delete_persona(client):
+    token = signup_get_token(client)
+    headers = {"Authorization": f"Bearer {token}"}
+
+    resp1 = client.post(
+        "/personas",
+        json={"title": "P1", "summary": ""},
+        headers=headers,
+    )
+    resp2 = client.post(
+        "/personas",
+        json={"title": "P2", "summary": ""},
+        headers=headers,
+    )
+    assert resp1.status_code == 200 and resp2.status_code == 200
+
+    list_resp = client.get("/personas", headers=headers)
+    assert list_resp.status_code == 200
+    personas = list_resp.json()
+    assert len(personas) == 2
+
+    p1_id = personas[0]["id"]
+    get_resp = client.get(f"/personas/{p1_id}", headers=headers)
+    assert get_resp.status_code == 200
+    assert get_resp.json()["id"] == p1_id
+
+    del_resp = client.delete(f"/personas/{p1_id}", headers=headers)
+    assert del_resp.status_code == 200
+
+    list_after = client.get("/personas", headers=headers)
+    assert len(list_after.json()) == 1
+
+    missing = client.get(f"/personas/{p1_id}", headers=headers)
+    assert missing.status_code == 404

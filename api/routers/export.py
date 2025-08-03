@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from jinja2 import Template
 from fpdf import FPDF
 import markdown
+from uuid import UUID
 
 from .. import schemas, models
 from ..deps import get_db, get_current_user
@@ -13,17 +14,18 @@ from ..deps import get_db, get_current_user
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
-DEFAULT_TEMPLATE = Template(
-    """# {{ persona.title }}\n\n{{ persona.summary or '' }}\n\n"""
+DEFAULT_TEMPLATE_STR = (
+    "# {{ persona.title }}\n\n{{ persona.summary or '' }}\n\n"
     "{% if persona.tags %}**Tags:** {{ persona.tags|join(', ') }}{% endif %}\n"
 )
+DEFAULT_TEMPLATE = Template(DEFAULT_TEMPLATE_STR)
 
 router = APIRouter(prefix="/export", tags=["export"])
 
 
 @router.post("/{persona_id}", response_model=schemas.ExportResponse)
 def export_persona(
-    persona_id: str,
+    persona_id: UUID,
     request: schemas.ExportRequest,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
@@ -38,13 +40,15 @@ def export_persona(
 
     template = DEFAULT_TEMPLATE
     if request.template_id:
-        tmpl = db.query(models.Template).filter(models.Template.id == request.template_id).first()
+        tmpl = (
+            db.query(models.Template)
+            .filter(models.Template.id == UUID(request.template_id))
+            .first()
+        )
         if not tmpl:
             raise HTTPException(status_code=404, detail="Template not found")
-        if tmpl.engine == models.TemplateEngine.jinja:
-            template = Template(tmpl.config.get("template", DEFAULT_TEMPLATE.source))
-        else:  # markdown engine
-            template = Template(tmpl.config.get("template", DEFAULT_TEMPLATE.source))
+        base = tmpl.config.get("template", DEFAULT_TEMPLATE_STR)
+        template = Template(base)
 
     markdown_text = template.render(persona=persona)
 
