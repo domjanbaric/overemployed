@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { JobDescriptionInput } from '../components/JobDescriptionInput';
 import { PersonaSelector } from '../components/PersonaSelector';
-import { TailoringSuggestions } from '../components/TailoringSuggestions';
-import { getPersonas, roleMatch, Persona } from '../utils/api';
+import { GapAnalysisPanel } from '../components/GapAnalysisPanel';
+import { getPersonas, roleMatch, Persona, GapReport } from '../utils/api';
 import { Button } from '../components/ui/Button';
 
 export default function ApplyPage() {
   const [personas, setPersonas] = useState<Persona[]>([]);
   const [selected, setSelected] = useState('');
   const [job, setJob] = useState('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [report, setReport] = useState<GapReport | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function ApplyPage() {
     setLoading(true);
     try {
       const res = await roleMatch({ persona_id: selected, job_description: job });
-      setSuggestions(res.suggestions);
+      setReport(res);
     } finally {
       setLoading(false);
     }
@@ -38,7 +38,7 @@ export default function ApplyPage() {
         </Button>
       </form>
       <div className="mt-6">
-        <TailoringSuggestions suggestions={suggestions} />
+        {report && <GapAnalysisPanel report={report} />}
       </div>
     </main>
   );

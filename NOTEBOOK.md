@@ -50,3 +50,12 @@ Each entry includes:
 **Context**: Only authentication pages existed on the frontend and the dashboard/other screens from FRONTEND_OUTLINE were missing.
 **Decision**: Added API utilities and implemented Dashboard, Upload, Apply, and Persona detail pages with reusable components (UploadButton, PersonaCard, KnowledgeBaseSummary, CVParsePreview, job tailoring tools, and export controls).
 **Reasoning**: Aligns UI with project outline, enabling CV uploads, persona management, gap analysis and role-specific tailoring directly from the frontend.
+## [2025-08-03 05:18:13 UTC] Decision: Add OpenAI-based gap analysis agent
+**Context**: Needed flexible gap analysis covering CV quality, CV vs job matching, and team composition with follow-up questions.
+**Decision**: Added prompt templates in `api/services/prompts.py`, implemented `GapAnalysisAgent` leveraging OpenAI chat models, extended schemas and router to support CV, role match, and team analyses with clarifying questions.
+**Reasoning**: Centralized templates enable consistent messaging, while a reusable agent provides chatbot-style interactions for various gap analysis scenarios.
+
+## [2025-08-03 05:55:19 UTC] Decision: Surface gap analysis questions in frontend
+**Context**: Frontend only displayed static issues and lacked support for role or team gap analyses.
+**Decision**: Updated API utilities and UI panels to consume a unified `GapReport` shape, exposing clarifying questions for CV, role-match, and team analyses.
+**Reasoning**: Ensures consistent chatbot-style interactions across analysis modes and prepares UI for follow-up conversations.

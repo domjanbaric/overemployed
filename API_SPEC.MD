@@ -99,14 +99,21 @@ Remove a persona
 
 Run general CV quality and gap analysis.
 
-* Response: `{ issues: [ { field, suggestion, severity } ] }`
+* Response: `{ issues: [ { field, suggestion, severity } ], questions: string[] }`
 
 ### `POST /gap_analysis/role_match`
 
 Run gap analysis between persona and job description.
 
 * Request: `{ persona_id, job_description }`
-* Response: `{ matched_skills, missing_keywords, suggestions }`
+* Response: `{ issues: [ { field, suggestion, severity } ], questions: string[] }`
+
+### `POST /gap_analysis/team`
+
+Run team gap analysis across multiple personas.
+
+* Request: `{ persona_ids: string[], team_description }`
+* Response: `{ issues: [ { field, suggestion, severity } ], questions: string[] }`
 
 ---
 
