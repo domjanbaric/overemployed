@@ -22,9 +22,9 @@ This document outlines the planned features for PersonaForge, grouped by release
 - [x] Feedback generation (e.g., “Add metrics to work history”)
 
 ### 4. Knowledge Base Builder
-- [ ] Ask follow-up questions to user (via UI)
+- [x] Ask follow-up questions to user (via UI)
 - [x] Store structured data: Skills, Tools, Context, Preferences
-- [ ] Supports iterative Q&A to complete the profile
+- [x] Supports iterative Q&A to complete the profile
 
 ### 5. Persona Manager
 - [x] Create/edit/delete named personas
