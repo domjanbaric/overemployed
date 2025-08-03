@@ -69,3 +69,8 @@ Each entry includes:
 **Context**: Required extracting structured CV data (experience, education, skills) from uploaded files.
 **Decision**: Created `CVParser` using OpenAI with a dedicated prompt, added PDF/DOCX text extraction and a `/cv/{id}/parse` endpoint storing raw text and structured JSON.
 **Reasoning**: Converts unstructured CV content into database-ready JSON, enabling downstream persona and analysis features.
+
+## [2025-08-03 08:08:01 UTC] Decision: Grouped knowledge base retrieval
+**Context**: `/knowledgebase` endpoint returned a flat list and frontend expected `content` fields, diverging from API_SPEC's structured groups.
+**Decision**: Returned grouped categories (skills, tools, domains, soft skills, preferences) via `KnowledgeBaseOut`, updated TypeScript utilities and UI to render sections, and added tests verifying clarification answers populate the profile.
+**Reasoning**: Structured response aligns API with specification and enables iterative Q&A to build a comprehensive user knowledge base.

@@ -66,13 +66,15 @@ export async function getPersonas(): Promise<Persona[]> {
   return res.json();
 }
 
-export interface KnowledgeBaseEntry {
-  id: number;
-  type: string;
-  content: string;
+export interface KnowledgeBase {
+  skills: string[];
+  tools: string[];
+  domains: string[];
+  soft_skills: string[];
+  preferences: string[];
 }
 
-export async function getKnowledgeBase(): Promise<KnowledgeBaseEntry[]> {
+export async function getKnowledgeBase(): Promise<KnowledgeBase> {
   const res = await fetch(`${API_BASE_URL}/knowledgebase`, {
     headers: { ...authHeader() },
   });
