@@ -1,10 +1,11 @@
 from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
+from uuid import UUID
 
 
 class CVPreview(BaseModel):
-    id: str
+    id: UUID
     filename: str
     created_at: datetime
 

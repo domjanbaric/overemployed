@@ -13,4 +13,8 @@ class Team(Base):
     name = Column(String, nullable=False)
     owner_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
 
-    members = relationship("User", back_populates="team")
+    members = relationship(
+        "User", back_populates="team", foreign_keys="User.team_id"
+    )
+
+    owner = relationship("User", foreign_keys=[owner_id])

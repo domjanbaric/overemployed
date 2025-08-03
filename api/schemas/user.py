@@ -1,9 +1,10 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr
+from uuid import UUID
 
 
 class UserOut(BaseModel):
-    id: str
+    id: UUID
     name: str
     email: EmailStr
     plan: str
