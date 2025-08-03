@@ -132,3 +132,7 @@ Each entry includes:
 **Context**: Added extensive endpoint tests which surfaced issues where string IDs failed against UUID columns and the `/cv/list` route was shadowed by the dynamic `{cv_id}` path.
 **Decision**: Updated CV, export, gap analysis, and templates routers to use `UUID` parameters and convert request fields accordingly. Reordered CV routes so `/cv/list` resolves correctly.
 **Reasoning**: Aligns request handling with database types, preventing runtime errors and ensuring all endpoints are reachable for testing.
+## [2025-08-03 14:14:22 UTC] Decision: Add frontend tests for auth forms
+**Context**: The web app had no automated tests covering the login and signup flows.
+**Decision**: Added Jest with React Testing Library, configured Next.js test environment, and wrote tests for `LoginForm` and `SignupForm` to verify API integration, token persistence, and error handling.
+**Reasoning**: Protects critical authentication interactions from regressions and establishes a foundation for broader component testing.
