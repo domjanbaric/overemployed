@@ -84,3 +84,12 @@ Each entry includes:
 **Context**: Knowledge base builder now supports follow-up questions and iterative Q&A.
 **Decision**: Marked remaining knowledge base builder tasks as completed in `FEATURES.md`.
 **Reasoning**: Keeps feature roadmap in sync with implemented capabilities.
+## [2025-08-03 09:00:53 UTC] Decision: Implement team management endpoints
+**Context**: Team-related features were outlined in API_SPEC and FEATURES but backend lacked routes and data structures.
+**Decision**: Added `TeamInvite` model and Pydantic schemas, implemented `/team` router with member listing, persona aggregation, and invite handling that provisions a team for the inviter when needed. Updated router inclusion and feature checklist.
+**Reasoning**: Provides core team workflows—inviting members and viewing collective personas—fulfilling V1.1 team functionality requirements.
+
+## [2025-08-03 09:45:35 UTC] Decision: Build team management UI
+**Context**: Backend supported team invites and listings but frontend lacked corresponding pages and components.
+**Decision**: Added API utilities for team members, personas, and invitations. Implemented `InviteUserForm`, `TeamMemberList`, and `TeamPersonaTable` components and assembled them in a new `/team` page.
+**Reasoning**: Completes end-to-end team features, allowing users to invite members and view team-wide personas from the web app.

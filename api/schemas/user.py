@@ -8,7 +8,7 @@ class UserOut(BaseModel):
     name: str
     email: EmailStr
     plan: str
-    team_id: Optional[str] = None
+    team_id: Optional[UUID] = None
 
     class Config:
         orm_mode = True
