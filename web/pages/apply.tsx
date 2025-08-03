@@ -2,8 +2,16 @@ import { useEffect, useState } from 'react';
 import { JobDescriptionInput } from '../components/JobDescriptionInput';
 import { PersonaSelector } from '../components/PersonaSelector';
 import { GapAnalysisPanel } from '../components/GapAnalysisPanel';
-import { getPersonas, roleMatch, Persona, GapReport } from '../utils/api';
+import {
+  getPersonas,
+  roleMatch,
+  Persona,
+  GapReport,
+  tailorTemplate,
+} from '../utils/api';
+import { TemplateSelector } from '../components/TemplateSelector';
 import { Button } from '../components/ui/Button';
+import { Textarea } from '../components/ui/Textarea';
 
 export default function ApplyPage() {
   const [personas, setPersonas] = useState<Persona[]>([]);
@@ -11,6 +19,9 @@ export default function ApplyPage() {
   const [job, setJob] = useState('');
   const [report, setReport] = useState<GapReport | null>(null);
   const [loading, setLoading] = useState(false);
+  const [template, setTemplate] = useState('');
+  const [tailored, setTailored] = useState('');
+  const [tailoring, setTailoring] = useState(false);
 
   useEffect(() => {
     getPersonas().then(setPersonas).catch(() => setPersonas([]));
@@ -27,18 +38,40 @@ export default function ApplyPage() {
     }
   }
 
+  async function handleTailor() {
+    if (!selected || !job || !template) return;
+    setTailoring(true);
+    try {
+      const res = await tailorTemplate(template, selected, job);
+      setTailored(res.content);
+    } finally {
+      setTailoring(false);
+    }
+  }
+
   return (
     <main className="p-8">
       <h1 className="mb-4 text-2xl font-bold">Tailor Application</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <JobDescriptionInput value={job} onChange={setJob} />
         <PersonaSelector personas={personas} value={selected} onChange={setSelected} />
-        <Button type="submit" disabled={loading || !selected || !job}>
-          {loading ? 'Analyzing…' : 'Analyze'}
-        </Button>
+        <TemplateSelector value={template} onChange={setTemplate} />
+        <div className="flex gap-2">
+          <Button type="submit" disabled={loading || !selected || !job}>
+            {loading ? 'Analyzing…' : 'Analyze'}
+          </Button>
+          <Button
+            type="button"
+            onClick={handleTailor}
+            disabled={tailoring || !selected || !job || !template}
+          >
+            {tailoring ? 'Tailoring…' : 'AI Tailor'}
+          </Button>
+        </div>
       </form>
-      <div className="mt-6">
+      <div className="mt-6 space-y-4">
         {report && <GapAnalysisPanel report={report} />}
+        {tailored && <Textarea label="Tailored CV" value={tailored} readOnly rows={10} />}
       </div>
     </main>
   );

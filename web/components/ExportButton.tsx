@@ -5,15 +5,16 @@ import { Button } from './ui/Button';
 interface Props {
   personaId: string;
   template: string;
+  format: string;
 }
 
-export function ExportButton({ personaId, template }: Props) {
+export function ExportButton({ personaId, template, format }: Props) {
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
     setLoading(true);
     try {
-      const res = await exportPersona(personaId, template);
+      const res = await exportPersona(personaId, format, template);
       window.open(res.url, '_blank');
     } finally {
       setLoading(false);

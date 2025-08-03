@@ -140,6 +140,31 @@ List available CV and cover letter templates.
 
 Fetch template config.
 
+### `POST /templates`
+
+Create a new template.
+
+* Request: `{ name, type, engine, config }`
+* Response: Template object
+
+### `PATCH /templates/{id}`
+
+Update an existing template.
+
+* Request: Partial template object
+* Response: Template object
+
+### `DELETE /templates/{id}`
+
+Delete a template.
+
+### `POST /templates/{id}/tailor`
+
+Use AI to tailor a persona to a job description using the specified template.
+
+* Request: `{ persona_id, job_description }`
+* Response: `{ content }` (Markdown)
+
 ---
 
 ## 🧳 TEAM MANAGEMENT (V1.1)

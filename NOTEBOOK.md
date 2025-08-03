@@ -74,3 +74,8 @@ Each entry includes:
 **Context**: `/knowledgebase` endpoint returned a flat list and frontend expected `content` fields, diverging from API_SPEC's structured groups.
 **Decision**: Returned grouped categories (skills, tools, domains, soft skills, preferences) via `KnowledgeBaseOut`, updated TypeScript utilities and UI to render sections, and added tests verifying clarification answers populate the profile.
 **Reasoning**: Structured response aligns API with specification and enables iterative Q&A to build a comprehensive user knowledge base.
+
+## [2025-08-03 09:30:00 UTC] Decision: Implement template management and AI tailoring
+**Context**: Needed full template editor with export and AI-assisted tailoring.
+**Decision**: Added template schemas, CRUD endpoints, and TailorCopilot service. Frontend now includes template management pages, format selection, and an AI button to generate tailored CV markdown based on persona and job description.
+**Reasoning**: Enables users to create and customize export templates, then leverage OpenAI to produce role-specific CVs, fulfilling template editor and auto tailoring features.
