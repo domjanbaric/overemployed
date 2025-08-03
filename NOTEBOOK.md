@@ -93,3 +93,18 @@ Each entry includes:
 **Context**: Backend supported team invites and listings but frontend lacked corresponding pages and components.
 **Decision**: Added API utilities for team members, personas, and invitations. Implemented `InviteUserForm`, `TeamMemberList`, and `TeamPersonaTable` components and assembled them in a new `/team` page.
 **Reasoning**: Completes end-to-end team features, allowing users to invite members and view team-wide personas from the web app.
+
+## [2025-08-03 10:15:07 UTC] Decision: Add skill taxonomy tagging
+**Context**: Knowledge base listed skills without categorization or synonym handling.
+**Decision**: Implemented `skill_taxonomy` service to normalize skill synonyms and assign high-level tags. Updated knowledge base endpoint, schemas, frontend types and UI, and added tests. Marked feature checklist accordingly.
+**Reasoning**: Provides consistent canonical skill representation and surfaces categorized tags for downstream features and UI clarity.
+
+## [2025-08-03 10:27:42 UTC] Decision: Externalize skill taxonomy
+**Context**: Hardcoded synonym and tag mappings required code changes for every new technology.
+**Decision**: Moved taxonomy to `api/data/skill_taxonomy.json` and updated the service to load mappings dynamically, defaulting unknown skills to an `Other` tag.
+**Reasoning**: A data-driven approach allows extending the taxonomy without touching code and gracefully handles previously unseen skills.
+
+## [2025-08-03 10:36:49 UTC] Decision: Defer skill taxonomy service
+**Context**: The taxonomy approach requires further design and isn't ready for production.
+**Decision**: Removed service usage and replaced its implementation with a `NotImplementedError` stub.
+**Reasoning**: Pausing the feature avoids premature complexity while signaling unfinished functionality if imported.
