@@ -79,3 +79,8 @@ Each entry includes:
 **Context**: Needed full template editor with export and AI-assisted tailoring.
 **Decision**: Added template schemas, CRUD endpoints, and TailorCopilot service. Frontend now includes template management pages, format selection, and an AI button to generate tailored CV markdown based on persona and job description.
 **Reasoning**: Enables users to create and customize export templates, then leverage OpenAI to produce role-specific CVs, fulfilling template editor and auto tailoring features.
+
+## [2025-08-03 10:45:00 UTC] Decision: Mark knowledge base builder complete
+**Context**: Knowledge base builder now supports follow-up questions and iterative Q&A.
+**Decision**: Marked remaining knowledge base builder tasks as completed in `FEATURES.md`.
+**Reasoning**: Keeps feature roadmap in sync with implemented capabilities.
