@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from .. import schemas, models
 from ..deps import get_db, get_current_user
+from ..services.cv_parser import CVParser
 
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
@@ -56,3 +57,28 @@ def list_cvs(
 ):
     cvs = db.query(models.CV).filter(models.CV.user_id == current_user.id).all()
     return cvs
+
+
+@router.post("/{cv_id}/parse", response_model=schemas.CVDetail)
+def parse_cv(
+    cv_id: str,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    cv = (
+        db.query(models.CV)
+        .filter(models.CV.id == cv_id, models.CV.user_id == current_user.id)
+        .first()
+    )
+    if not cv:
+        raise HTTPException(status_code=404, detail="CV not found")
+    parser = CVParser()
+    path = UPLOAD_DIR / cv.filename
+    text = parser.extract_text(path)
+    parsed = parser.parse(text)
+    cv.raw_text = text
+    cv.parsed_json = parsed
+    cv.status = models.CVStatus.parsed
+    db.commit()
+    db.refresh(cv)
+    return cv

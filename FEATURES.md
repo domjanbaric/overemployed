@@ -13,7 +13,7 @@ This document outlines the planned features for PersonaForge, grouped by release
 
 ### 2. CV Upload & Parsing
 - [x] PDF/DOCX support
-- [ ] Extract: name, title, work history, education, skills, certifications
+- [x] Extract: name, title, work history, education, skills, certifications
 - [ ] Detect sections using layout + ML/NLP heuristics
 
 ### 3. General CV Gap Analysis

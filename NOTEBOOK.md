@@ -64,3 +64,8 @@ Each entry includes:
 **Context**: Needed to reflect current project progress in `FEATURES.md`.
 **Decision**: Reviewed repository to determine which planned features are implemented and marked them with checkboxes in `FEATURES.md`.
 **Reasoning**: Keeps feature roadmap up to date, highlighting completed work and remaining scope for contributors.
+
+## [2025-08-03 07:24:30 UTC] Decision: Implement CV parsing service
+**Context**: Required extracting structured CV data (experience, education, skills) from uploaded files.
+**Decision**: Created `CVParser` using OpenAI with a dedicated prompt, added PDF/DOCX text extraction and a `/cv/{id}/parse` endpoint storing raw text and structured JSON.
+**Reasoning**: Converts unstructured CV content into database-ready JSON, enabling downstream persona and analysis features.
