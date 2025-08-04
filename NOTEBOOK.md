@@ -149,3 +149,7 @@ Each entry includes:
 **Context**: FastAPI's interactive docs failed to authorize because `/auth/login` expected JSON, while Swagger's OAuth2 flow sends form-encoded credentials.
 **Decision**: Added `/auth/token` endpoint accepting `OAuth2PasswordRequestForm` and updated dependency configuration so Swagger obtains tokens using form fields. Existing `/auth/login` JSON route remains for frontend and tests.
 **Reasoning**: Providing a dedicated form-based token endpoint preserves current API behavior while enabling developers to authenticate through `/docs` without 422 errors.
+## [2025-08-04 14:52:40 UTC] Decision: Load `.env` configuration in backend
+**Context**: The FastAPI backend relied on `os.environ` without loading `.env`, so values like `SECRET_KEY` and `DATABASE_URL` were ignored outside Docker.
+**Decision**: Added automatic `.env` loading via `python-dotenv` in `api/__init__.py` and restricted table auto-creation to SQLite to avoid failing when configured for Postgres.
+**Reasoning**: Ensures local development and tests use environment configuration while preventing unintended connections to external databases.

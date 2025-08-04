@@ -13,3 +13,4 @@ openai
 pypdf
 python-docx
 email-validator
+python-dotenv

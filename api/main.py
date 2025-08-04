@@ -3,9 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 
 from .routers import api_router
-from .database import Base, engine
+from .database import Base, engine, SQLALCHEMY_DATABASE_URL
 
-Base.metadata.create_all(bind=engine)
+# Only create tables automatically when using the default SQLite database. This
+# avoids attempting to connect to external databases (e.g. Postgres) during
+# application import, which can fail in environments like tests.
+if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
+    Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="PersonaForge API")
 
