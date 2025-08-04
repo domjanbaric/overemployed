@@ -140,3 +140,8 @@ Each entry includes:
 **Context**: Deprecation warnings arose from Pydantic v1 patterns (`orm_mode`, `.dict()`) and naive datetime usage in models and token creation.
 **Decision**: Replaced `orm_mode` with `ConfigDict(from_attributes=True)`, switched `.dict()` calls to `model_dump()`, and adopted timezone-aware `datetime.now(timezone.utc)` defaults.
 **Reasoning**: Aligns schemas and routers with Pydantic v2 and Python 3.12, removing warnings and ensuring future compatibility.
+
+## [2025-08-04 14:04:09 UTC] Decision: Parse CV immediately on upload
+**Context**: After uploading a CV the frontend fetched its record but never invoked the `/cv/{id}/parse` endpoint. The UI attempted to render `cv.data`, mismatching the backend's `parsed_json` field and leaving the "Parsed CV" section empty.
+**Decision**: Added `parseCV` helper calling the parse endpoint, updated the upload page to invoke parsing and map `parsed_json`, and adjusted the preview component to handle missing data with a progress message.
+**Reasoning**: Automatically parsing newly uploaded CVs and aligning property names ensures users see extracted information instead of an empty placeholder.
