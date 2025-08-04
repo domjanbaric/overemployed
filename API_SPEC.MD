@@ -20,6 +20,13 @@ Authenticate and return JWT.
 * Request: `{ email, password }`
 * Response: `{ token }`
 
+### `POST /auth/token`
+
+OAuth2 password flow endpoint used by interactive docs.
+
+* Request: form fields `username`, `password`
+* Response: `{ token }`
+
 ---
 
 ## 👤 USERS

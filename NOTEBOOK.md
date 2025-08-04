@@ -145,3 +145,7 @@ Each entry includes:
 **Context**: After uploading a CV the frontend fetched its record but never invoked the `/cv/{id}/parse` endpoint. The UI attempted to render `cv.data`, mismatching the backend's `parsed_json` field and leaving the "Parsed CV" section empty.
 **Decision**: Added `parseCV` helper calling the parse endpoint, updated the upload page to invoke parsing and map `parsed_json`, and adjusted the preview component to handle missing data with a progress message.
 **Reasoning**: Automatically parsing newly uploaded CVs and aligning property names ensures users see extracted information instead of an empty placeholder.
+## [2025-08-04 14:15:59 UTC] Decision: Support OAuth2 form login for docs
+**Context**: FastAPI's interactive docs failed to authorize because `/auth/login` expected JSON, while Swagger's OAuth2 flow sends form-encoded credentials.
+**Decision**: Added `/auth/token` endpoint accepting `OAuth2PasswordRequestForm` and updated dependency configuration so Swagger obtains tokens using form fields. Existing `/auth/login` JSON route remains for frontend and tests.
+**Reasoning**: Providing a dedicated form-based token endpoint preserves current API behavior while enabling developers to authenticate through `/docs` without 422 errors.
