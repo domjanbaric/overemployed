@@ -135,8 +135,10 @@ export async function uploadCV(file: File): Promise<CVUploadResponse> {
 
 export interface CVData {
   id: string;
-  name: string;
-  data: any;
+  filename: string;
+  parsed_json?: any;
+  raw_text?: string;
+  created_at?: string;
 }
 
 export async function getCV(id: string): Promise<CVData> {
@@ -145,6 +147,17 @@ export async function getCV(id: string): Promise<CVData> {
   });
   if (!res.ok) {
     throw new Error('Failed to load CV');
+  }
+  return res.json();
+}
+
+export async function parseCV(id: string): Promise<CVData> {
+  const res = await fetch(`${API_BASE_URL}/cv/${id}/parse`, {
+    method: 'POST',
+    headers: { ...authHeader() },
+  });
+  if (!res.ok) {
+    throw new Error('Failed to parse CV');
   }
   return res.json();
 }
