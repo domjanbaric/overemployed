@@ -153,3 +153,7 @@ Each entry includes:
 **Context**: The FastAPI backend relied on `os.environ` without loading `.env`, so values like `SECRET_KEY` and `DATABASE_URL` were ignored outside Docker.
 **Decision**: Added automatic `.env` loading via `python-dotenv` in `api/__init__.py` and restricted table auto-creation to SQLite to avoid failing when configured for Postgres.
 **Reasoning**: Ensures local development and tests use environment configuration while preventing unintended connections to external databases.
+## [2025-08-04 19:27:35 UTC] Decision: Add global layout with navigation
+**Context**: Frontend lacked consistent structure across pages.
+**Decision**: Created `Layout` component with sidebar links, header, footer, and applied it in `_app.tsx` to wrap all pages.
+**Reasoning**: Provides cohesive app-wide design and central navigation elements for future expansion.
