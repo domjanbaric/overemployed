@@ -95,7 +95,9 @@ export default function TeamPage() {
             {analyzing ? 'Analyzing…' : 'Analyze Team'}
           </Button>
         </form>
-        {report && <GapAnalysisPanel report={report} />}
+        {report && (
+          <GapAnalysisPanel report={report} analysisType="team_analysis" />
+        )}
       </section>
     </div>
   );

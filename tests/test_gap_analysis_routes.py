@@ -94,3 +94,22 @@ def test_gap_analysis_endpoints(client, monkeypatch):
         headers=headers,
     )
     assert bad_req.status_code == 400
+
+    def dummy_ask(self, user_input):
+        return gap_schemas.GapReportOut(issues=[], questions=["F"], messages=[])
+
+    monkeypatch.setattr(
+        "api.routers.gap_analysis.GapAnalysisAgent.ask", dummy_ask
+    )
+
+    ask_resp = client.post(
+        "/gap_analysis/ask",
+        json={
+            "analysis_type": "cv_analysis",
+            "messages": [],
+            "user_input": "a",
+        },
+        headers=headers,
+    )
+    assert ask_resp.status_code == 200
+    assert ask_resp.json()["questions"] == ["F"]

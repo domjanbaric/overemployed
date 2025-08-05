@@ -5,7 +5,7 @@ from typing import Dict, List
 
 from openai import OpenAI
 
-from ..schemas.gap import GapReportOut
+from ..schemas.gap import GapReportOut, ChatMessage
 from .prompts import GAP_ANALYSIS_PROMPTS
 
 
@@ -31,7 +31,7 @@ class GapAnalysisAgent:
         content = response.choices[0].message.content
         self.messages.append({"role": "assistant", "content": content})
         data = json.loads(content)
-        return GapReportOut(**data)
+        return GapReportOut(**data, messages=[ChatMessage(**m) for m in self.messages])
 
     def ask(self, user_input: str) -> GapReportOut:
         """Continue the conversation with user input."""
@@ -42,4 +42,4 @@ class GapAnalysisAgent:
         content = response.choices[0].message.content
         self.messages.append({"role": "assistant", "content": content})
         data = json.loads(content)
-        return GapReportOut(**data)
+        return GapReportOut(**data, messages=[ChatMessage(**m) for m in self.messages])
