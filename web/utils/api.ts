@@ -233,9 +233,15 @@ export interface GapIssue {
   severity: string;
 }
 
+export interface ChatMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
 export interface GapReport {
   issues: GapIssue[];
   questions: string[];
+  messages: ChatMessage[];
 }
 
 export async function getGapAnalysis(id: string): Promise<GapReport> {
@@ -278,6 +284,24 @@ export async function teamGapAnalysis(req: TeamGapRequest): Promise<GapReport> {
   });
   if (!res.ok) {
     throw new Error('Failed to analyze team');
+  }
+  return res.json();
+}
+
+export interface GapAskRequest {
+  analysis_type: string;
+  messages: ChatMessage[];
+  user_input: string;
+}
+
+export async function askGapAnalysis(req: GapAskRequest): Promise<GapReport> {
+  const res = await fetch(`${API_BASE_URL}/gap_analysis/ask`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeader() },
+    body: JSON.stringify(req),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to continue gap analysis');
   }
   return res.json();
 }

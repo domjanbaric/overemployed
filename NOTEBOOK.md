@@ -157,3 +157,7 @@ Each entry includes:
 **Context**: Frontend lacked consistent structure across pages.
 **Decision**: Created `Layout` component with sidebar links, header, footer, and applied it in `_app.tsx` to wrap all pages.
 **Reasoning**: Provides cohesive app-wide design and central navigation elements for future expansion.
+## [2025-08-05 06:28:48 UTC] Decision: Enable conversational gap analysis
+**Context**: Gap analysis returned static questions without supporting iterative dialogue.
+**Decision**: Added `GapAskRequest` schema, `/gap_analysis/ask` endpoint, and a chat-style frontend to handle sequential questions using stored messages.
+**Reasoning**: Enables multiple follow-up questions, making the gap analysis process conversational as required.

@@ -89,3 +89,13 @@ def team_gap_analysis(
     )
     agent = GapAnalysisAgent("team_analysis")
     return agent.start(team=team_text, goal=data.team_description)
+
+
+@router.post("/ask", response_model=schemas.GapReportOut)
+def gap_analysis_followup(
+    data: schemas.GapAskRequest,
+    current_user: models.User = Depends(get_current_user),
+):
+    agent = GapAnalysisAgent(data.analysis_type)
+    agent.messages = [m.model_dump() for m in data.messages]
+    return agent.ask(data.user_input)

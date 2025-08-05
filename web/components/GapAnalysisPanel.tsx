@@ -1,20 +1,24 @@
 import { useState } from 'react';
-import { GapReport, updatePersona, clarifyKnowledgeBase } from '../utils/api';
+import { GapReport, ChatMessage, updatePersona, askGapAnalysis } from '../utils/api';
 import { Input } from './ui/Input';
 import { Button } from './ui/Button';
 
 interface Props {
   report: GapReport;
+  analysisType: string;
   personaId?: string;
-  onClarify?: () => void;
 }
 
-export function GapAnalysisPanel({ report, personaId, onClarify }: Props) {
+export function GapAnalysisPanel({ report, analysisType, personaId }: Props) {
   const [issues, setIssues] = useState(report.issues);
-  const [questions, setQuestions] = useState(report.questions);
-  const [answers, setAnswers] = useState<string[]>(report.questions.map(() => ''));
-  const [submitting, setSubmitting] = useState(false);
-  if (!issues.length && !questions.length) return null;
+  const [messages, setMessages] = useState<ChatMessage[]>(report.messages || []);
+  const [chat, setChat] = useState<ChatMessage[]>(
+    report.questions.map(q => ({ role: 'assistant', content: q })),
+  );
+  const [input, setInput] = useState('');
+  const [sending, setSending] = useState(false);
+
+  if (!issues.length && chat.length === 0) return null;
 
   async function apply(idx: number) {
     if (!personaId) return;
@@ -27,22 +31,28 @@ export function GapAnalysisPanel({ report, personaId, onClarify }: Props) {
     }
   }
 
-  async function submitAnswers() {
-    const payload: Record<string, string> = {};
-    answers.forEach((a, i) => {
-      if (a.trim()) payload[i.toString()] = a.trim();
-    });
-    if (Object.keys(payload).length === 0) return;
-    setSubmitting(true);
+  async function send() {
+    const userMsg = input.trim();
+    if (!userMsg) return;
+    setSending(true);
     try {
-      await clarifyKnowledgeBase(payload);
-      setQuestions([]);
-      setAnswers([]);
-      onClarify?.();
+      const res = await askGapAnalysis({
+        analysis_type: analysisType,
+        messages,
+        user_input: userMsg,
+      });
+      setIssues(res.issues);
+      setMessages(res.messages);
+      setChat(prev => [
+        ...prev,
+        { role: 'user', content: userMsg },
+        ...res.questions.map(q => ({ role: 'assistant', content: q })),
+      ]);
+      setInput('');
     } catch (err) {
       console.error(err);
     } finally {
-      setSubmitting(false);
+      setSending(false);
     }
   }
 
@@ -72,28 +82,25 @@ export function GapAnalysisPanel({ report, personaId, onClarify }: Props) {
           ))}
         </ul>
       )}
-      {questions.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="mb-1 font-semibold text-onSurface dark:text-onSurface-dark">Clarifying Questions</h4>
-          {questions.map((q, idx) => (
-            <Input
-              key={idx}
-              label={q}
-              value={answers[idx]}
-              onChange={e =>
-                setAnswers(a => {
-                  const copy = [...a];
-                  copy[idx] = e.target.value;
-                  return copy;
-                })
-              }
-            />
+      <div className="space-y-2">
+        <div className="max-h-60 space-y-1 overflow-y-auto">
+          {chat.map((m, idx) => (
+            <div key={idx} className={m.role === 'user' ? 'text-right' : 'text-left'}>
+              <span className="text-sm text-onSurface dark:text-onSurface-dark">
+                {m.content}
+              </span>
+            </div>
           ))}
-          <Button type="button" onClick={submitAnswers} disabled={submitting}>
-            {submitting ? 'Submitting…' : 'Submit Answers'}
-          </Button>
         </div>
-      )}
+        <Input
+          label="Your response"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+        />
+        <Button type="button" onClick={send} disabled={sending}>
+          {sending ? 'Sending…' : 'Send'}
+        </Button>
+      </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@ from .auth import SignupRequest, LoginRequest, TokenResponse
 from .user import UserOut, UserUpdate
 from .cv import CVPreview, CVDetail
 from .persona import PersonaCreate, PersonaOut
-from .gap import GapIssue, GapReportOut, TeamGapRequest
+from .gap import GapIssue, GapReportOut, TeamGapRequest, ChatMessage, GapAskRequest
 from .knowledgebase import KBEntryOut, ClarifyRequest, KnowledgeBaseOut
 from .export import ExportRequest, ExportResponse, ExportFormat
 from .template import (
@@ -27,6 +27,8 @@ __all__ = [
     "GapIssue",
     "GapReportOut",
     "TeamGapRequest",
+    "ChatMessage",
+    "GapAskRequest",
     "TeamInviteCreate",
     "TeamInviteOut",
     "TeamMembersOut",
