@@ -1,6 +1,23 @@
+"""FastAPI application entrypoint."""
+
+import argparse
+import os
+from dotenv import load_dotenv, find_dotenv
+
+# Allow a custom path to an `.env` file via ``--env-file``. When provided the
+# specified file is loaded before any other imports so configuration is in
+# place for modules like the database engine.
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument("--env-file", help="Path to environment file")
+args, _ = parser.parse_known_args()
+
+if args.env_file:
+    load_dotenv(args.env_file, override=True)
+else:  # Fall back to the closest `.env` discovered automatically
+    load_dotenv(find_dotenv())
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import os
 
 from .routers import api_router
 from .database import Base, engine, SQLALCHEMY_DATABASE_URL
@@ -28,3 +45,9 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("api.main:app", host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))

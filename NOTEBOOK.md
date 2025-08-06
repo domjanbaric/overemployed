@@ -176,3 +176,8 @@ Each entry includes:
 **Context**: `CVParser.parse` raised `JSONDecodeError` when the model returned content with code fences or extra prose, resulting in a 500 error.
 **Decision**: Wrapped the JSON parse in a `try/except`, stripping the content and extracting the first JSON object via regex. The CV router now returns a 502 response when parsing fails.
 **Reasoning**: Improves resilience against imperfect model responses and prevents unhandled exceptions from crashing the CV parsing endpoint.
+
+## [2025-08-06 08:59:32 UTC] Decision: Allow runtime selection of `.env` file
+**Context**: The backend loaded environment variables from the nearest `.env` file without a way to override the location for different environments.
+**Decision**: Added a `--env-file` argument in `api/main.py` that loads the specified file before app initialization and updated package initialization to respect an `ENV_FILE` override.
+**Reasoning**: Enables running the service with custom configuration files, improving flexibility for testing and deployment setups.
