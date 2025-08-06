@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Dict
 
@@ -32,9 +33,19 @@ class CVParser:
             return file_path.read_text()
 
     def parse(self, cv_text: str) -> Dict:
+        """Return structured data for the supplied CV text."""
+
         prompt = CV_PARSE_TEMPLATE.substitute(cv=cv_text)
         response = self.client.chat.completions.create(
-            model=self.model, messages=[{"role": "system", "content": prompt}]
+            model=self.model,
+            messages=[{"role": "user", "content": prompt}],
         )
-        content = response.choices[0].message.content
-        return json.loads(content)
+        content = (response.choices[0].message.content or "").strip()
+        try:
+            return json.loads(content)
+        except json.JSONDecodeError:
+            # Sometimes the model wraps JSON in code fences or adds prose.
+            match = re.search(r"\{.*\}", content, re.DOTALL)
+            if match:
+                return json.loads(match.group())
+            raise ValueError("Model did not return valid JSON")

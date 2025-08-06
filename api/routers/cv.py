@@ -76,7 +76,10 @@ def parse_cv(
     parser = CVParser()
     path = UPLOAD_DIR / cv.filename
     text = parser.extract_text(path)
-    parsed = parser.parse(text)
+    try:
+        parsed = parser.parse(text)
+    except ValueError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
     cv.raw_text = text
     cv.parsed_json = parsed
     cv.status = models.CVStatus.parsed

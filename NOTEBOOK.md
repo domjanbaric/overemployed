@@ -166,3 +166,13 @@ Each entry includes:
 **Context**: The API only auto-creates tables for SQLite, leaving PostgreSQL deployments without schema bootstrap.
 **Decision**: Introduced `api/migrate.py` to run `Base.metadata.create_all` against the configured Postgres database and documented usage in the README.
 **Reasoning**: Provides a simple, explicit migration step for Postgres without adding a full migration framework, aligning with existing project practices.
+
+## [2025-08-06 08:43:00 UTC] Decision: Commit default .env for tests
+**Context**: Test suite expected `SECRET_KEY` from a `.env` file, but the file was absent so the default `devsecret` was used, causing failures.
+**Decision**: Added a repository-level `.env` with `SECRET_KEY=changeme` so configuration loads during tests and development.
+**Reasoning**: Ensures environment variables are consistently populated and keeps tests aligned with documented defaults.
+
+## [2025-08-06 08:43:00 UTC] Decision: Harden CV parser JSON handling
+**Context**: `CVParser.parse` raised `JSONDecodeError` when the model returned content with code fences or extra prose, resulting in a 500 error.
+**Decision**: Wrapped the JSON parse in a `try/except`, stripping the content and extracting the first JSON object via regex. The CV router now returns a 502 response when parsing fails.
+**Reasoning**: Improves resilience against imperfect model responses and prevents unhandled exceptions from crashing the CV parsing endpoint.
