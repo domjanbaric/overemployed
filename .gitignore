@@ -270,3 +270,4 @@ coverage/
 # -----------------------------
 Thumbs.db
 .DS_Storeuploads/
+.env
