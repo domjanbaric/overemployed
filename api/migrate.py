@@ -8,7 +8,8 @@ on application startup.
 
 from sqlalchemy.exc import SQLAlchemyError
 
-from .database import Base, engine, SQLALCHEMY_DATABASE_URL
+from api.database import Base, engine, SQLALCHEMY_DATABASE_URL
+from api import models
 
 
 def run() -> None:
