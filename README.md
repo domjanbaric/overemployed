@@ -52,3 +52,13 @@ The backend Docker image installs packages from `requirements.txt`. After adding
 docker compose build backend
 ```
 
+
+## 🛠️ Database Migrations
+
+When using PostgreSQL, the application does not automatically create tables. After setting `DATABASE_URL` to a Postgres connection string, run the following command once to bootstrap the schema:
+
+```bash
+python -m api.migrate
+```
+
+This applies the SQLAlchemy models to the configured database. SQLite databases are initialized automatically on startup and do not require this step.
