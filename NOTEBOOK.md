@@ -161,3 +161,8 @@ Each entry includes:
 **Context**: Gap analysis returned static questions without supporting iterative dialogue.
 **Decision**: Added `GapAskRequest` schema, `/gap_analysis/ask` endpoint, and a chat-style frontend to handle sequential questions using stored messages.
 **Reasoning**: Enables multiple follow-up questions, making the gap analysis process conversational as required.
+
+## [2025-08-05T16:35:00Z] Decision: Add manual migration script for PostgreSQL
+**Context**: The API only auto-creates tables for SQLite, leaving PostgreSQL deployments without schema bootstrap.
+**Decision**: Introduced `api/migrate.py` to run `Base.metadata.create_all` against the configured Postgres database and documented usage in the README.
+**Reasoning**: Provides a simple, explicit migration step for Postgres without adding a full migration framework, aligning with existing project practices.
